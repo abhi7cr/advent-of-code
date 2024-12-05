@@ -8,7 +8,7 @@ const find = (input, word, directions) => {
     const isSafeExploration = (i, j) => i >= 0 && i < rowLen && j >= 0 && j < colLen;
 
     const dfs = (i, j, [dx, dy], searchWord, curr = '', path = []) => {
-        if (curr.length > 4) return;
+        if (curr.length > searchWord.length) return;
         if (curr === searchWord && !visited.has(path.join('->'))) {
             visited.add(path.join('->'))
             res++;
