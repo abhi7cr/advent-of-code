@@ -133,6 +133,7 @@ const part2 = () => {
         const dx = Math.abs(second[0] - first[0]);
         const dy = Math.abs(second[1] - first[1]);
         let x, y;
+        // Move up from first antenna (going left/right based on the relative position of the first antenna)
         do {
           if (x !== undefined && y !== undefined) {
             antinodes.add(`${x},${y}`);
@@ -145,6 +146,7 @@ const part2 = () => {
         } while (x >= 0 && y >= 0 && x < rows && y < cols);
         x = undefined;
         y = undefined;
+        // Move down from second antenna (going left/right based on the relative position of the second antenna)
         do {
           if (x !== undefined && y !== undefined) {
             antinodes.add(`${x},${y}`);
