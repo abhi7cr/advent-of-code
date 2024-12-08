@@ -54,10 +54,10 @@ const testInput = `............
 .....0......
 .......0....
 ....0.......
-......A.....
+.....A......
 ............
 ............
-........A...
+...........
 .........A..
 ............
 ............`;
@@ -122,6 +122,47 @@ const part1 = () => {
   return antinodes;
 };
 
+const part2WithoutGCD = () => {
+    const antinodes = new Set();
+    for (const [k, v] of antennas) {
+      for (let i = 0; i < v.length; ++i) {
+        antinodes.add(`${v[i][0]},${v[i][1]}`);
+        for (let j = i + 1; j < v.length; ++j) {
+          const first = v[i];
+          const second = v[j];
+          const dx = Math.abs(second[0] - first[0]);
+          const dy = Math.abs(second[1] - first[1]);
+          let x, y;
+          // Move up from first antenna (going left/right based on the relative position of the first antenna)
+          do {
+            if (x !== undefined && y !== undefined) {
+              antinodes.add(`${x},${y}`);
+            }
+            x = (x != undefined ? x : first[0]) - dx;
+            y =
+              first[1] > second[1]
+                ? (y != undefined ? y : first[1]) + dy
+                : (y != undefined ? y : first[1]) - dy;
+          } while (x >= 0 && y >= 0 && x < rows && y < cols);
+          x = undefined;
+          y = undefined;
+          // Move down from first antenna (going left/right based on the relative position of the first antenna)
+          do {
+            if (x !== undefined && y !== undefined) {
+              antinodes.add(`${x},${y}`);
+            }
+            x = (x != undefined ? x : second[0]) + dx;
+            y =
+                first[1] < second[1]
+                ? (y != undefined ? y : second[1]) + dy
+                : (y != undefined ? y : second[1]) - dy;
+          } while (x >= 0 && y >= 0 && x < rows && y < cols);
+        }
+      }
+    }
+    return antinodes;
+  };
+
 const part2 = () => {
   const antinodes = new Set();
   for (const [k, v] of antennas) {
@@ -130,32 +171,31 @@ const part2 = () => {
       for (let j = i + 1; j < v.length; ++j) {
         const first = v[i];
         const second = v[j];
-        const dx = Math.abs(second[0] - first[0]);
-        const dy = Math.abs(second[1] - first[1]);
+        let dx = second[0] - first[0];
+        let dy = second[1] - first[1];
+        // find gcd of dx and dy
+        const gcd = (a, b) => (b == 0 ? a : gcd(b, a % b));
+        const gcdValue = gcd(dx, dy)
+        dx = dx / gcdValue
+        dy = dy / gcdValue
         let x, y;
-        // Move up from first antenna (going left/right based on the relative position of the first antenna)
+        // go down
+        do {
+          if (x !== undefined && y !== undefined) {
+            antinodes.add(`${x},${y}`);
+          }
+          x = (x != undefined ? x : first[0]) + dx;
+          y = (y != undefined ? y : first[1]) + dy;
+        } while (x >= 0 && y >= 0 && x < rows && y < cols);
+        x = undefined;
+        y = undefined;
+        // go up
         do {
           if (x !== undefined && y !== undefined) {
             antinodes.add(`${x},${y}`);
           }
           x = (x != undefined ? x : first[0]) - dx;
-          y =
-            first[1] > second[1]
-              ? (y != undefined ? y : first[1]) + dy
-              : (y != undefined ? y : first[1]) - dy;
-        } while (x >= 0 && y >= 0 && x < rows && y < cols);
-        x = undefined;
-        y = undefined;
-        // Move down from second antenna (going left/right based on the relative position of the second antenna)
-        do {
-          if (x !== undefined && y !== undefined) {
-            antinodes.add(`${x},${y}`);
-          }
-          x = (x != undefined ? x : second[0]) + dx;
-          y =
-            second[1] > first[1]
-              ? (y != undefined ? y : second[1]) + dy
-              : (y != undefined ? y : second[1]) - dy;
+          y = (y != undefined ? y : first[1]) - dy;
         } while (x >= 0 && y >= 0 && x < rows && y < cols);
       }
     }
@@ -169,8 +209,15 @@ console.log("ANSWER: ", part1Antinodes.size);
 console.log("***MAP***");
 visualize(part1Antinodes);
 
-console.log("***PART2***");
+console.log("***PART2 WITH GCD***");
 const part2Antinodes = part2();
 console.log("ANSWER: ", part2Antinodes.size);
 console.log("***MAP***");
 visualize(part2Antinodes);
+
+
+console.log("***PART2 WITHOUT GCD***");
+const part2WithoutGCDAntinodes = part2WithoutGCD();
+console.log("ANSWER: ", part2WithoutGCDAntinodes.size);
+console.log("***MAP***");
+visualize(part2WithoutGCDAntinodes);
