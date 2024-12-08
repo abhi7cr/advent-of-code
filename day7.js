@@ -1,13 +1,14 @@
-const testInput = `190: 10 19
-3267: 81 40 27
-83: 17 5
-156: 15 6
-7290: 6 8 6 15
-161011: 16 10 13
-192: 17 8 14
-21037: 9 7 18 13
-292: 11 6 16 20`;
+// const testInput = `190: 10 19
+// 3267: 81 40 27
+// 83: 17 5
+// 156: 15 6
+// 7290: 6 8 6 15
+// 161011: 16 10 13
+// 192: 17 8 14
+// 21037: 9 7 18 13
+// 292: 11 6 16 20`;
 
+console.time("time");
 const input = `20261572812: 98 138 31 2 666
 45327: 8 9 335 97 87
 829287: 99 13 816 7 1 744 9
@@ -863,31 +864,34 @@ const equations = input.split("\n");
 let total = 0;
 
 const equate = (numbers, expectedResult, curr = 1, start = 0) => {
+  if (curr > expectedResult) {
+    return false;
+  }
   if (start === numbers.length) {
     return curr === expectedResult;
   }
-  const val1 = equate(
-    numbers,
-    expectedResult,
-    start === 0 ? numbers[start] : curr + numbers[start],
-    start + 1
+  return (
+    equate(
+      numbers,
+      expectedResult,
+      start === 0 ? numbers[start] : curr + numbers[start],
+      start + 1
+    ) ||
+    equate(
+      numbers,
+      expectedResult,
+      start === 0 ? numbers[start] : curr * numbers[start],
+      start + 1
+    ) ||
+    (start > 0
+      ? equate(
+          numbers,
+          expectedResult,
+          Number(`${curr}` + `${numbers[start]}`),
+          start + 1
+        )
+      : false)
   );
-  const val2 = equate(
-    numbers,
-    expectedResult,
-    start === 0 ? numbers[start] : curr * numbers[start],
-    start + 1
-  );
-  let val3 = false
-  if (start > 0) {
-    val3 = equate(
-        numbers,
-        expectedResult,
-        Number(`${curr}` + `${numbers[start]}`),
-        start + 1
-      );
-  }
-  return val1 || val2 || val3;
 };
 
 equations.forEach((eq) => {
@@ -896,8 +900,9 @@ equations.forEach((eq) => {
   const numbers = value.split(" ").map(Number);
   const isValid = equate(numbers, result);
   if (isValid) {
-    total +=result;
+    total += result;
   }
 });
 
 console.log(total);
+console.timeEnd("time");
