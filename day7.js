@@ -863,42 +863,33 @@ const input = `20261572812: 98 138 31 2 666
 const equations = input.split("\n");
 let total = 0;
 
-const equate = (numbers, expectedResult, curr = 1, start = 0) => {
+// how to improve the performance of below code ?
+
+const equate = (numbers, len, expectedResult, curr = numbers[0], start = 1) => {
   if (curr > expectedResult) {
     return false;
   }
-  if (start === numbers.length) {
+  if (start === len) {
     return curr === expectedResult;
   }
   return (
+    equate(numbers, len, expectedResult, curr + numbers[start], start + 1) ||
+    equate(numbers, len, expectedResult, curr * numbers[start], start + 1) ||
     equate(
       numbers,
+      len,
       expectedResult,
-      start === 0 ? numbers[start] : curr + numbers[start],
+      Number(`${curr}` + `${numbers[start]}`),
       start + 1
-    ) ||
-    equate(
-      numbers,
-      expectedResult,
-      start === 0 ? numbers[start] : curr * numbers[start],
-      start + 1
-    ) ||
-    (start > 0
-      ? equate(
-          numbers,
-          expectedResult,
-          Number(`${curr}` + `${numbers[start]}`),
-          start + 1
-        )
-      : false)
+    )
   );
 };
-
+let len = 0;
 equations.forEach((eq) => {
   let [result, value] = eq.split(": ");
   result = Number(result);
   const numbers = value.split(" ").map(Number);
-  const isValid = equate(numbers, result);
+  const isValid = equate(numbers, numbers.length, result);
   if (isValid) {
     total += result;
   }
