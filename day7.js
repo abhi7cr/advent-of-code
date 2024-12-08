@@ -877,7 +877,7 @@ const equate = (numbers, len, expectedResult, curr = numbers[0], start = 1) => {
       numbers,
       len,
       expectedResult,
-      Number(`${curr}` + `${numbers[start]}`),
+      Number(`${curr}${numbers[start]}`),
       start + 1
     )
   );
@@ -887,8 +887,7 @@ equations.forEach((eq) => {
   let [result, value] = eq.split(": ");
   result = Number(result);
   const numbers = value.split(" ").map(Number);
-  const isValid = equate(numbers, numbers.length, result);
-  if (isValid) {
+  if (equate(numbers, numbers.length, result)) {
     total += result;
   }
 });
