@@ -863,8 +863,6 @@ const input = `20261572812: 98 138 31 2 666
 const equations = input.split("\n");
 let total = 0;
 
-// how to improve the performance of below code ?
-
 const equate = (numbers, len, expectedResult, curr = numbers[0], start = 1) => {
   if (curr > expectedResult) {
     return false;
@@ -884,7 +882,7 @@ const equate = (numbers, len, expectedResult, curr = numbers[0], start = 1) => {
     )
   );
 };
-let len = 0;
+
 equations.forEach((eq) => {
   let [result, value] = eq.split(": ");
   result = Number(result);
