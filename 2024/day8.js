@@ -62,7 +62,7 @@ const testInput = `............
 ............
 ............`;
 
-const grid = input.split("\n").map((row) => row.split(""));
+const grid = testInput.split("\n").map((row) => row.split(""));
 const rows = grid.length;
 const cols = grid[0].length;
 let antennas = new Map();
@@ -151,11 +151,11 @@ const part2WithoutGCD = () => {
             if (x !== undefined && y !== undefined) {
               antinodes.add(`${x},${y}`);
             }
-            x = (x != undefined ? x : second[0]) + dx;
+            x = (x != undefined ? x : first[0]) + dx;
             y =
                 first[1] < second[1]
-                ? (y != undefined ? y : second[1]) + dy
-                : (y != undefined ? y : second[1]) - dy;
+                ? (y != undefined ? y : first[1]) + dy
+                : (y != undefined ? y : first[1]) - dy;
           } while (x >= 0 && y >= 0 && x < rows && y < cols);
         }
       }
