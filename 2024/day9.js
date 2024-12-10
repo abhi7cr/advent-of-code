@@ -20,9 +20,9 @@ const buildCompactArray = (input) => {
   return compactRep;
 };
 
-const computeCheckSumPartTwo = (compactArr) => {
+const moveFilesToFreeSpace = (compactArr) => {
   let end = compactArr.length - 1;
-  for (; end > 0;) {
+  while (end > 0) {
     const [data, size] = compactArr[end];
     if (data === ".") {
       end--;
@@ -66,6 +66,19 @@ const computeCheckSumPartTwo = (compactArr) => {
 };
 
 const computeCheckSum = (compactArr) => {
+  let total = 0;
+  let j = 0;
+  for (let i = 0; i < compactArr.length; ++i) {
+    const [data, size] = compactArr[i];
+    for (let c = 0; c < size; ++c) {
+      total += data === "." ? 0 : data * j;
+      j++;
+    }
+  }
+  return total;
+}
+
+const moveFileBlocksToFreeSpace = (compactArr) => {
   let end = compactArr.length - 1;
   for (let i = 0; i < end; ++i) {
     const [data, size] = compactArr[i];
@@ -115,11 +128,13 @@ const computeCheckSum = (compactArr) => {
 
 let performanceStart = performance.now();
 let compactArray = buildCompactArray(input);
+moveFileBlocksToFreeSpace(compactArray);
 console.log(computeCheckSum(compactArray));
 console.log(performance.now() - performanceStart)
 
 performanceStart = performance.now();
 compactArray = buildCompactArray(input);
-console.log(computeCheckSumPartTwo(compactArray));
+moveFilesToFreeSpace(compactArray);
+console.log(computeCheckSum(compactArray));
 console.log(performance.now() - performanceStart)
 
