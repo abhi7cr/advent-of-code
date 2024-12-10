@@ -52,17 +52,6 @@ const moveFilesToFreeSpace = (compactArr) => {
       end--;
     }
   }
-
-  let total = 0;
-  let j = 0;
-  for (let i = 0; i < compactArr.length; ++i) {
-    const [data, size] = compactArr[i];
-    for (let c = 0; c < size; ++c) {
-      total += data === "." ? 0 : data * j;
-      j++;
-    }
-  }
-  return total;
 };
 
 const computeCheckSum = (compactArr) => {
@@ -113,17 +102,6 @@ const moveFileBlocksToFreeSpace = (compactArr) => {
       }
     }
   }
-
-  let total = 0;
-  let j = 0;
-  for (let i = 0; i < compactArr.length; ++i) {
-    const [data, size] = compactArr[i];
-    for (let c = 0; c < size; ++c) {
-      total += data === "." ? 0 : data * j;
-      j++;
-    }
-  }
-  return total;
 };
 
 let performanceStart = performance.now();
